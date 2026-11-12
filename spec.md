@@ -248,10 +248,24 @@ Căng thẳng đã gặp: G11 đòi giải thích, §1 cấm lộ cách phát hi
 * **Trước khi đặt mức tự chủ:** Sản phẩm dễ tạo ảo tưởng *"Chat với AI để AI tự động mở khóa và giải quyết mọi giao dịch cho bạn"*. Lời hứa này cực kỳ nguy hiểm vì khi AI từ chối nhả tiền ở ca lừa đảo, khách sẽ tức giận chửi bới AI lừa đảo hoặc máy móc.
 * **Sau khi đặt mức tự chủ chuẩn:** Lời hứa định vị lại thành: *"AI là Trợ lý An toàn giúp bảo vệ tài sản của bạn, hướng dẫn xác thực nhanh nhất và chuẩn bị hồ sơ ưu tiên để Chuyên viên hỗ trợ mở tiền an toàn."* Khách hiểu rõ AI không có quyền tùy tiện thả tiền, từ đó giảm kỳ vọng sai lệch và chấp nhận ma sát xác thực danh tính.
 
-## §5. Prototype  (chặng 5)
-- Link hoặc file · công cụ · phần nào mock · có lời gọi AI thật không.
-- 1–2 ảnh có đánh số; mỗi số: thể hiện gì · nguyên tắc HAX/PAIR nào · mức tự chủ nào.
-- Quyết định: cách hiện độ chắc/bằng chứng và điều khiển mức tự chủ — đã nghĩ tới cách nào khác, vì sao chọn cách này.
+## §5. Prototype  (chặng 5) — Phụ trách chính: Trần Mạnh Hùng
+- **Đường dẫn:** Thư mục `prototype/` (mở trực tiếp `prototype/index.html` trên trình duyệt Chrome/Edge/Safari).
+- **Công cụ:** HTML5, CSS3 tinh chỉnh theo phong cách MoMo Design System, Vanilla JavaScript (Single Page Application, không yêu cầu cài đặt server hay build step).
+- **Phần mock:** Dữ liệu số dư, đồng hồ đếm ngược 30 phút của `giu_giao_dich`, popup FaceID mô phỏng.
+- **Lời gọi AI thật (Bonus +3 điểm):** Tích hợp live Zero-shot Inference Engine qua Hugging Face Router (`facebook/bart-large-mnli`) và cơ chế On-Device Safety Classifier dự phòng tại hàm `sendCustomMessage` trong `app.js`. Có khung **LIVE AI API CALL INSPECTOR** hiển thị trực tiếp JSON log, model name, độ trễ `ms` và điểm tin cậy `confidence`.
+
+### Đánh số các vùng giao diện phục vụ chấm Rubric R5:
+1. **[Vùng 1 - Header Banner]:** Thể hiện nhận diện `AI Assistant · HAX G2` (Minh bạch AI theo Luật AI 134/2025/QH15).
+2. **[Vùng 2 - Alert Card]:** Thể hiện **HAX G8 (Giải thích lý do/Explainability)**: Hiển thị lý do giao dịch bị giữ dựa trên lời khách kể hoặc tần suất bất thường, tuyệt đối không lộ ngưỡng hay cơ chế nội bộ.
+3. **[Vùng 3 - Countdown 30 phút]:** Thể hiện tool `giu_giao_dich` chạy ở mức **Tự làm (Full-Auto)** để bảo vệ tài sản ngay lập tức.
+4. **[Vùng 4 - Action Buttons]:** 
+   - Nút `👤 Quét FaceID`: Tool `yeu_cau_xac_minh` (Tự làm).
+   - Nút `📞 Gặp Tư vấn viên P0` / `🛡️ Hủy giao dịch an toàn`: Thể hiện **HAX G10 & G9 (Đường lui an toàn & Sửa sai)**.
+   - **Đặc biệt:** Phía giao diện khách hàng **TUYỆT ĐỐI KHÔNG CÓ NÚT "NHẢ TIỀN"** (Tool `nha_giao_dich` ở mức Cần người duyệt/Cấm AI tự tiện thả).
+5. **[Vùng 5 - Control Panel]:** Thanh công cụ bên trái cho phép TA/Giảng viên test tức thì 4 ca thử nghiệm (K1 lừa đảo 50tr, K2 viện phí 15tr, K3 ăn trưa 50k, K4 ca lạ đòi khóa ví người khác).
+6. **[Vùng 6 - Live API Inspector]:** Kiểm tra log thời gian thực của mô hình AI phân loại rủi ro (đạt tiêu chí Bonus +3).
+
+- **Quyết định thiết kế:** Nhóm chọn hình thức **Split View (Bảng điều khiển kiểm thử song song với Màn hình Mobile)** thay vì chỉ làm 1 màn hình điện thoại đơn lẻ. Cách này giúp người chấm (TA/Thầy cô) vừa quan sát được trải nghiệm thực tế của người dùng, vừa thấy rõ ma trận tự chủ 5 tool và log AI backend mà không cần mở tab DevTools.
 
 ## §6. Tốt là gì  (chặng 6 — nhẹ, bỏ được nếu thiếu giờ)
 
