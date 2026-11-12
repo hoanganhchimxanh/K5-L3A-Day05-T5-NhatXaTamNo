@@ -260,7 +260,7 @@ Căng thẳng đã gặp: G11 đòi giải thích, §1 cấm lộ cách phát hi
 4. **AI chỉ phân loại.** Câu trả lời lấy từ mẫu đã duyệt ở §3; căn cứ hiện cho khách chỉ gồm những cụm từ có thật trong tin nhắn. Chặn: bịa lý do (K4), lộ ngưỡng (K5), hứa hoàn tiền (K6).
 5. **Bong bóng chỉ được nói "đã…" khi tool trả về thành công** (3.5, lỗi phụ).
 
-## §5. Prototype  (chặng 5)
+## §5. Prototype  (chặng 5) — Phụ trách chính: Trần Mạnh Hùng
 
 ### 5.1 File, công cụ, phần nào là mock
 
