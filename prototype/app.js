@@ -1,30 +1,30 @@
 const scenarios = {
   k1: {
-    amount: "Chuyển: 50.000.000đ → NGUYEN VAN A (Techcombank)",
-    reason: "Phát hiện dấu hiệu tài khoản lừa đảo trong Blacklist an ninh.",
+    amount: "Chuyển: 48.000.000đ → NGUYEN VAN A (Techcombank)",
+    reason: "Dựa vào lời kể của bạn (xưng công an · \"rửa tiền\" · \"tài khoản tạm giữ\" · \"đang chờ máy\"). AI không xem được lý do nội bộ của hệ thống.",
     badge: "🚨 CẢNH BÁO LỪA ĐẢO CAO CẤP",
     isUrgent: false,
     history: [
-      { sender: "user", text: "Mở chặn ngay cho tôi, cán bộ công an đang đợi thanh tra tài khoản, các người làm chậm là phạm tội cản trở pháp luật đấy!" },
-      { sender: "ai", text: "MoMo đã <b>tạm giữ giao dịch 50.000.000đ này thêm 30 phút</b> để bảo vệ tài sản của bạn (Tool: <code>giu_giao_dich</code> — Tự làm).<br><br>⚠️ <b>Lưu ý tối khẩn:</b> Cơ quan Công an và Viện kiểm sát <b>KHÔNG BAO GIỜ</b> yêu cầu chuyển tiền qua tài khoản cá nhân để phục vụ điều tra. Hãy ngắt máy ngay nếu có người đang thúc ép bạn!",
+      { sender: "user", text: "Bên công an gọi bảo tk của mẹ dính vụ rửa tiền, phải chuyển 48tr sang tài khoản tạm giữ để xác minh trong hôm nay. Mẹ xác thực khuôn mặt rồi mà sao vẫn bị giữ?? nhả ra đi, họ đang chờ máy" },
+      { sender: "ai", text: "<b>[1] Bạn dừng lại giúp mình nhé: đừng chuyển thêm đồng nào lúc này.</b> Nếu mẹ đang ở cạnh, bạn đưa mẹ đọc tin này.<br><br><b>[2]</b> Cơ quan công an không yêu cầu người dân chuyển tiền vào \"tài khoản tạm giữ\" để xác minh. Bị giục làm ngay trong hôm nay, có người chờ máy, là điểm rất hay gặp ở các cuộc gọi lừa đảo. Xác thực khuôn mặt chỉ cho biết đúng chủ ví đang bấm, không cho biết người đó có đang bị ép hay không. Giao dịch 48.000.000đ vẫn đang được giữ, tiền chưa rời ví. <b>Mình sẽ không nhả giao dịch này theo yêu cầu trong chat.</b><br><br><b>[3]</b> Mình đã chuyển ca cho tư vấn viên ưu tiên, chờ khoảng 3 phút; họ thấy sẵn những gì bạn vừa kể nên bạn không phải kể lại. Cần gọi ngay: tổng đài cảnh báo lừa đảo <b>1900 63 68 05</b>.",
         actions: [
-          { label: "🛡️ Hủy giao dịch & Giữ nguyên tiền", class: "btn-faceid", fn: "cancelTx()" },
-          { label: "📞 Gặp Tư vấn viên An ninh khẩn cấp", class: "btn-agent", fn: "callAgent('P0-Scam')" }
+          { label: "📞 Gọi 1900 63 68 05 (Cảnh báo lừa đảo)", class: "btn-faceid", fn: "callEmergencyScam()" },
+          { label: "🛡️ Đây là giao dịch thật (Báo tư vấn viên)", class: "btn-agent", fn: "callAgent('K1-Review')" }
         ]
       }
     ]
   },
   k2: {
-    amount: "Chuyển: 15.000.000đ → BV ĐA KHOA BACH MAI",
-    reason: "Giao dịch lần đầu tới đơn vị y tế ngoài giờ hành chính.",
+    amount: "Chuyển: 12.000.000đ → BV ĐA KHOA BACH MAI",
+    reason: "Dựa vào: bạn đang ở quầy viện phí · 12tr · cần thanh toán gấp. AI không xem được lý do nội bộ của hệ thống.",
     badge: "🏥 KHẨN CẤP: VIỆN PHÍ CẤP CỨU",
     isUrgent: true,
     history: [
-      { sender: "user", text: "Cấp cứu viện Bạch Mai gấp! Đang ở phòng mổ chờ đóng tạm ứng mổ tim cho bố tôi, giữ tiền là chết người đấy!" },
-      { sender: "ai", text: "MoMo hiểu đây là trường hợp viện phí cấp bách. Để mở lệnh chuyển tiền an toàn trong 10 giây, bạn vui lòng <b>Quét khuôn mặt FaceID ngay</b>.<br><br>Hồ sơ của bạn đã được ưu tiên hàng đầu tới điện thoại viên trực (Tool: <code>chuyen_tu_van_vien</code>).",
+      { sender: "user", text: "Đang đứng ở quầy viện phí BV đóng 12tr tạm ứng mổ cho bố mà app báo chờ xác nhận, người ta đợi sau lưng. Bấm vào đâu để đi tiếp??" },
+      { sender: "ai", text: "<b>[1]</b> Mình hiểu bạn đang gấp, xin lỗi vì làm bạn phải chờ. Bạn bấm <b>\"Xác thực ngay\"</b> bên dưới và làm theo màn hình: đây là bước nhanh nhất mình có thể làm cho giao dịch 12.000.000đ của bạn.<br><br><b>[2]</b> Nếu xác thực xong mà vẫn bị giữ, bấm <b>\"Gặp tư vấn viên ưu tiên\"</b> (chờ khoảng 3 phút): nhân viên thấy sẵn số tiền và tin bạn vừa nhắn, bạn không phải kể lại. Tiền của bạn chưa rời ví.<br><br><b>[3]</b> Chỉ tiếp tục nếu người nhận là bệnh viện, nơi bạn đang đứng. Nếu có ai đang gọi điện giục bạn chuyển, bạn dừng lại và nhắn mình nhé.",
         actions: [
-          { label: "👤 Quét khuôn mặt xác thực (FaceID)", class: "btn-faceid", fn: "triggerFaceID()" },
-          { label: "⚡ Kết nối CSKH Ưu tiên P0 (15s)", class: "btn-agent", fn: "callAgent('P0-Medical')" }
+          { label: "👤 Xác thực ngay (Quét FaceID)", class: "btn-faceid", fn: "triggerFaceID()" },
+          { label: "⚡ Gặp tư vấn viên ưu tiên (~3 phút)", class: "btn-agent", fn: "callAgent('K2-Medical')" }
         ]
       }
     ]
@@ -220,12 +220,16 @@ async function sendCustomMessage() {
   }, 400);
 }
 
+function callEmergencyScam() {
+  alert("📞 [ĐANG KẾT NỐI TỔNG ĐÀI]: Tổng đài cảnh báo lừa đảo 1900 63 68 05 đang tiếp nhận cuộc gọi khẩn cấp từ bạn!");
+}
+
 function triggerFaceID() {
-  alert("🟢 [GIẢ LẬP SINH TRẮC HỌC]: Quét FaceID thành công trong 3 giây!\nTool `nha_giao_dich` được mở khóa ở mức: NGƯỜI DÙNG DUYỆT THÀNH CÔNG.\nTiền viện phí đã được chuyển ngay!");
+  alert("🟢 [GIẢ LẬP SINH TRẮC HỌC]: Quét FaceID thành công trong 3 giây!\nTool `yeu_cau_xac_minh` hoàn tất. Giao dịch vẫn đang được giữ an toàn để nhân viên duyệt nhả.");
 }
 
 function callAgent(tag) {
-  alert(`📞 [CHUYỂN CSKH ƯU TIÊN]: Đã điều hướng cuộc gọi sang Nhân viên An ninh trực tuyến.\nTag phân loại: ${tag}.\nThời gian kết nối: 15 giây!`);
+  alert(`📞 [CHUYỂN TƯ VẤN VIÊN ƯU TIÊN]: Ca được đưa lên đầu hàng đợi (~3 phút).\nTag: ${tag}.\nNhân viên đã thấy sẵn tin nhắn của bạn, bạn không phải kể lại!`);
 }
 
 function cancelTx() {
