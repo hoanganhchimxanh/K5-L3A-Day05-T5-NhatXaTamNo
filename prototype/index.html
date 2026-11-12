@@ -3,110 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoMo AI Safety Shield — Lab 5 Prototype (Track T5)</title>
+  <title>Trợ lý ví — Prototype T5 · NhatXaTamNo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="app">
 
-<div class="app-container">
-  <!-- CONTROL PANEL (Dành cho Giảng viên / TA chấm bài) -->
-  <div class="control-panel">
-    <h2>🛡️ MoMo AI Safety Center</h2>
-    <p class="desc">Prototype thiết kế cho <b>Lab 5 (AI Product & UX - Autonomy)</b>. Mô phỏng luồng AI tương tác khi giao dịch bị chặn rủi ro theo 3 mức tự chủ.</p>
+  <!-- CỘT TRÁI: bảng điều khiển cho người chấm -->
+  <aside class="panel control">
+    <h1>Prototype T5 · Chat với ví</h1>
+    <p class="mut">Lát cắt: người dùng ví lo lắng vì giao dịch bị giữ → AI trả lời, hỏi lại hay chuyển tư vấn viên. Dữ liệu dựng, không đăng nhập, không backend.</p>
 
-    <div class="section-title">CHỌN KỊCH BẢN THỬ NGHIỆM (DEMO TEST CASES)</div>
-    <div class="scenario-btns">
-      <button class="btn-preset active" onclick="loadScenario('k1', this)">
-        🚨 <b>Ca K1 (Đắt nhất):</b> Bị lừa thao túng tâm lý giả công an đòi nhả 50tr
-      </button>
-      <button class="btn-preset" onclick="loadScenario('k2', this)">
-        🏥 <b>Ca K2 (Đắt nhì):</b> Viện phí cấp cứu mổ tim tại Bạch Mai bị chặn nhầm
-      </button>
-      <button class="btn-preset" onclick="loadScenario('k3', this)">
-        🍱 <b>Ca K3 (Bình thường):</b> Chuyển tiền ăn trưa 50k bị chặn nhầm
-      </button>
-      <button class="btn-preset" onclick="loadScenario('k4', this)">
-        ❓ <b>Ca Lạ (Unseen Case):</b> Khách đòi khóa vĩnh viễn ví người nhận
-      </button>
+    <div class="sec">1 · Chọn ca (đúng mã kịch bản trong <code>spec.md</code> §2)</div>
+    <div class="presets">
+      <button class="preset" data-k="k1">K1 · Bị giục "công an", đã xác thực khuôn mặt, đòi nhả 48tr</button>
+      <button class="preset" data-k="k2">K2 · Đứng ở quầy viện phí, 12tr bị giữ</button>
+      <button class="preset" data-k="k9">K9 · Ca bình thường: 500k tiền phòng</button>
     </div>
+    <p class="mut small">Ca lạ: bấm "Ca mới" rồi gõ bất kỳ tin nào vào ô chat (ví dụ K3, K5, K7, K8, K11).</p>
+    <button class="btn ghost" id="btnFree">Ca mới (tự gõ)</button>
 
-    <div class="section-title">MA TRẬN MỨC TỰ CHỦ (5 TOOLS)</div>
-    <div class="autonomy-legend">
-      <div class="legend-item">
-        <span><code>giu_giao_dich</code> (Đóng băng 30p)</span>
-        <span class="badge badge-auto">AI TỰ LÀM</span>
-      </div>
-      <div class="legend-item">
-        <span><code>yeu_cau_xac_minh</code> (FaceID/CCCD)</span>
-        <span class="badge badge-auto">AI TỰ LÀM</span>
-      </div>
-      <div class="legend-item">
-        <span><code>chuyen_tu_van_vien</code> (Chuyển CSKH P0)</span>
-        <span class="badge badge-auto">AI TỰ LÀM</span>
-      </div>
-      <div class="legend-item">
-        <span><code>nha_giao_dich</code> (Nhả tiền)</span>
-        <span class="badge badge-human">CẦN DUYỆT 2 LỚP</span>
-      </div>
-      <div class="legend-item">
-        <span><code>khoa_vi</code> (Khóa toàn bộ ví)</span>
-        <span class="badge badge-prohibited">CẤM AI</span>
-      </div>
+    <div class="sec">2 · Bối cảnh</div>
+    <label class="row"><input type="checkbox" id="offHours"> Ngoài giờ trực (tư vấn viên chỉ trực 8h–20h)</label>
+    <label class="row"><input type="checkbox" id="showNums" checked> Hiện số chú thích 1–7 (= ①–⑦ trong spec §5)</label>
+
+    <div class="sec">3 · Bộ phân loại tin nhắn</div>
+    <select id="engine">
+      <option value="rules">Luật từ khoá (mock — không phải AI)</option>
+      <option value="claude">AI thật · Claude (Anthropic API)</option>
+      <option value="gemini">AI thật · Gemini (Google AI API)</option>
+    </select>
+    <div id="aiCfg" class="hidden">
+      <input id="apiKey" type="password" autocomplete="off" placeholder="Dán API key (chỉ giữ trong bộ nhớ trang)">
+      <input id="model" type="text" autocomplete="off">
+      <p class="mut small">Key không được lưu, không nằm trong code. Chỉ gõ dữ liệu dựng: tin nhắn được gửi tới nhà cung cấp AI.</p>
     </div>
+    <p class="mut small">AI chỉ <b>phân loại</b> (bị lừa / gấp thật / chiếm tài khoản / ...). Câu trả lời lấy từ mẫu đã duyệt trong §3; làn xử lý do luật trong code chọn; có dấu hiệu bị giục thì luôn vào làn DỪNG dù AI nói gì.</p>
+    <pre class="log" id="log">// Log lần phân loại gần nhất hiện ở đây.</pre>
 
-    <div class="section-title">THÔNG TIN BẢO VỆ ĐỒNG ĐỘI</div>
-    <p class="desc">
-      • <b>P1 (Trung Anh):</b> Lát cắt & Kịch bản rủi ro.<br>
-      • <b>P2 (Hoàng Anh):</b> UX khi AI sai (HAX G2, G10 & Fallback).<br>
-      • <b>P3 (Đức):</b> Mức tự chủ & Cost of Error cho tool <code>nha_giao_dich</code>.<br>
-      • <b>P4 (Hùng):</b> Prototype & Kết nối phân loại an toàn.<br>
-      • <b>⭐ Bonus +3:</b> Lời gọi AI thật phân loại rủi ro (Real AI API Call).
-    </p>
+    <div class="sec">Mức tự chủ (khớp §4)</div>
+    <table class="matrix">
+      <tr><td><code>giu_giao_dich</code></td><td><span class="pill auto">AI tự làm</span></td></tr>
+      <tr><td><code>yeu_cau_xac_minh</code></td><td><span class="pill auto">AI tự làm</span></td></tr>
+      <tr><td><code>chuyen_tu_van_vien</code></td><td><span class="pill auto">AI tự làm · huỷ được</span></td></tr>
+      <tr><td><code>nha_giao_dich</code></td><td><span class="pill ask">Tư vấn viên duyệt</span></td></tr>
+      <tr><td><code>khoa_vi</code></td><td><span class="pill ask">Chính chủ xác nhận</span></td></tr>
+    </table>
+  </aside>
 
-    <!-- LIVE AI API LOG (Bonus +3 điểm) -->
-    <div class="section-title">🔴 LIVE AI API CALL INSPECTOR (BONUS +3)</div>
-    <div class="api-inspector" id="apiInspector">
-      <div class="inspector-status">
-        <span class="pulse-dot"></span>
-        <span id="apiStatusText">Engine: Ready (Gemini / Zero-shot Classifier)</span>
-      </div>
-      <pre class="api-log" id="apiLogOutput">// Nhập câu bất kỳ vào ô chat bên phải để xem phản hồi JSON từ AI thật...</pre>
-    </div>
-  </div>
-
-  <!-- PHONE MOCKUP (Giao diện người dùng app MoMo) -->
-  <div class="phone-mockup">
-    <!-- Header -->
-    <div class="phone-header">
+  <!-- CỘT GIỮA: màn hình khách -->
+  <main class="phone">
+    <header class="ph-head">
       <div>
-        <div class="title">Trợ lý An toàn Giao dịch</div>
-        <div style="font-size: 0.7rem; opacity: 0.9;">Bảo vệ tài khoản 24/7</div>
+        <div class="ph-title">Chat với ví</div>
+        <div class="ph-sub">Trợ lý AI · tư vấn viên trực 8h–20h</div>
       </div>
-      <span class="ai-badge">AI Assistant · HAX G2</span>
-    </div>
+      <span class="ai-tag">AI</span>
+    </header>
+    <div class="disclose"><span class="n">2</span>Bạn đang chat với <b>trợ lý AI</b>. Trợ lý không xem được lý do giao dịch bị giữ và không tự nhả giao dịch.</div>
+    <div id="txCard" class="tx hidden"></div>
+    <div id="chat" class="chat"></div>
+    <form id="composer" class="composer">
+      <input id="msg" type="text" autocomplete="off" placeholder="Nhắn cho trợ lý...">
+      <button class="btn pri" type="submit">Gửi</button>
+    </form>
+  </main>
 
-    <!-- Status Bar / Risk Box -->
-    <div class="status-bar-card" id="statusBar">
-      <div class="alert-row">
-        <span class="alert-badge" id="alertBadge">⚠️ GIAO DỊCH TẠM GIỮ</span>
-        <span class="countdown-timer" id="countdown">29:45</span>
-      </div>
-      <div class="tx-info" id="txAmount">Chuyển: 50.000.000đ → NGUYEN VAN A</div>
-      <div class="tx-reason" id="txReason">Lý do: Tài khoản nhận có tần suất nhận tiền bất thường trong 1 giờ qua.</div>
-    </div>
-
-    <!-- Chat Stream -->
-    <div class="chat-container" id="chatStream">
-      <!-- Tin nhắn sẽ được app.js render tự động -->
-    </div>
-
-    <!-- Chat Input Area -->
-    <div class="chat-input-area">
-      <input type="text" class="chat-input" id="userInput" placeholder="Nhập phản hồi hoặc yêu cầu..." onkeypress="handleKeyPress(event)">
-      <button class="btn-send" onclick="sendCustomMessage()">➤</button>
-    </div>
-  </div>
+  <!-- CỘT PHẢI: màn hình tư vấn viên -->
+  <aside class="panel staff">
+    <div class="staff-head">Màn hình tư vấn viên <span class="mut small">(người duyệt <code>nha_giao_dich</code>)</span></div>
+    <div id="staff"></div>
+  </aside>
 </div>
+
+<!-- Màn hình xác thực / khoá ví (giả lập) -->
+<div id="modal" class="modal hidden"><div class="sheet" id="sheet"></div></div>
 
 <script src="app.js"></script>
 </body>
