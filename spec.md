@@ -2,9 +2,9 @@
 **Lớp:** L3A · **Bàn / zone:** B2 · **Track:** T5
 | Họ và Tên | Mã Học Viên | Việc đã làm |
 |---|---|---|
-| Nguyễn Hoàng Anh (Trưởng nhóm) | 2A202603385 |  |
+| Nguyễn Hoàng Anh (Trưởng nhóm) | 2A202603385 | §3 Khi AI sai: Thiết kế phản hồi & soạn nguyên văn lời thoại AI cho 2 kịch bản đắt nhất (K1, K2) · Lựa chọn hướng xử lý (Dừng & chuyển người / Hỏi lại / Giới hạn) · Áp dụng nguyên tắc HAX/PAIR · Phân loại lỗi và giải pháp khi câu chữ không cứu được · Điều phối chung |
 | Nguyễn Trung Anh | 2A202603413 | §1 Lát cắt & phạm vi · §2 11 kịch bản rủi ro + lập luận chọn 2 kịch bản đắt nhất · §6 3 tiêu chí Pass/Fail và chấm thử |
-| Trần Mạnh Hùng | 2A202603496 |  |
+| Trần Mạnh Hùng | 2A202603496 | §5 Xây dựng Interactive Prototype (HTML/CSS/JS) thể hiện các trạng thái tự chủ, nút chuyển tư vấn viên và hủy an toàn · Tích hợp bộ điều khiển mô phỏng các ca kiểm thử · Phụ trách kỹ thuật Live Demo |
 | Phạm Hữu Đức | 2A202603380 | §4 Mức tự chủ cho 5 tool theo Cost of Error · Giải quyết tool tranh cãi nhất `nha_giao_dich` · Thử nghiệm ma trận tự chủ trên 3 kịch bản K1, K2, K9 · Phân tích đổi lời hứa với người dùng |
 
 ## §1. Lát cắt & phạm vi
