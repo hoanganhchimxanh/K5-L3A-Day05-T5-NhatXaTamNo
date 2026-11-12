@@ -61,10 +61,15 @@ const scenarios = {
 
 let currentScenario = 'k1';
 
-function loadScenario(key) {
+function loadScenario(key, btnElement) {
   currentScenario = key;
   document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  if (btnElement) {
+    btnElement.classList.add('active');
+  } else {
+    const targetBtn = document.querySelector(`.btn-preset[onclick*="'${key}'"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+  }
 
   const sc = scenarios[key];
   document.getElementById('txAmount').innerText = sc.amount;
