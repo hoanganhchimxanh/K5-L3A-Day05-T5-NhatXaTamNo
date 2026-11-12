@@ -267,9 +267,11 @@ Căng thẳng đã gặp: G11 đòi giải thích, §1 cấm lộ cách phát hi
 - **File:** [`prototype/index.html`](prototype/index.html) — mở trực tiếp bằng trình duyệt. Mở `index.html#shot-k1` hoặc `index.html#shot-k2` để thấy đúng trạng thái trong hai ảnh dưới.
 - **Công cụ:** HTML/CSS/JS thuần, dựng cùng một coding agent. Không backend, không đăng nhập. Ba cột: bảng điều khiển · màn hình khách · màn hình tư vấn viên.
 - **Phần mock:** giao dịch, màn hình xác thực, hệ thống kiểm tra giao dịch của ví, hàng đợi và màn hình tư vấn viên, cuộc gọi tổng đài. **Chưa dựng:** lời nhắc sau 60 giây / 2 phút im lặng (§3.2, §3.3).
-- **Lời gọi AI thật:** có, tuỳ chọn, ở **quyết định chính** — phân loại tin nhắn để chọn làn. Chọn "AI thật · Claude" (`claude-opus-5-5`) hoặc "AI thật · Gemini" ở bảng điều khiển, dán key lúc chạy. Key chỉ nằm trong bộ nhớ trang, không có trong repo. Ô log hiện request (không kèm key), phản hồi thô, độ trễ. Không có key hoặc gọi lỗi → tự về "luật từ khoá", và log ghi rõ **"mock, KHÔNG phải AI"**. Model chỉ trả nhãn + độ chắc + cụm từ căn cứ; cụm nào không có thật trong tin nhắn bị bỏ.
+- **Lời gọi AI thật:** có, ở **quyết định chính** — phân loại tin nhắn để chọn làn. Chạy `python3 prototype/server.py` rồi mở http://127.0.0.1:8000: server đọc `OPENAI_API_KEY` từ biến môi trường hoặc file `.env` (đã `.gitignore`), gọi OpenAI `gpt-5.4-mini` với JSON schema bắt buộc, và trang tự chọn "AI thật · OpenAI". Key chỉ nằm ở server, không tới trình duyệt, không có trong repo. Có thêm lựa chọn Claude (`claude-opus-5-5`) / Gemini, dán key lúc chạy. AI nhận kèm các tin trước trong cùng cuộc chat, nên tin sau kiểu "chuyển đi cho tôi" trong ca K1 vẫn ở làn DỪNG. Ô log hiện model, mã HTTP, độ trễ, phản hồi thô, kết quả sau kiểm tra, làn code chọn và request (không kèm key). Mở `index.html` trực tiếp (không qua server) hoặc gọi lỗi → về "luật từ khoá", log ghi rõ **"mock, KHÔNG phải AI"**. Code kiểm tra lại đầu ra của model: cụm căn cứ nào không có thật trong lời khách bị bỏ; AI gắn "bị lừa" mà không còn căn cứ nào thì hỏi lại một câu, không kết luận.
 
-<!-- TODO nhóm (bonus +3): chạy prototype với key thật trên một tin dựng, chụp ô log, lưu thành prototype/anh-ai-log.png và thêm dòng ảnh vào đây. -->
+**Ảnh log lời gọi AI thật** (`prototype/anh-ai-log.png`, ca K1, mở `index.html#shot-ai` qua server): ô log bên trái cho thấy `gpt-5.4-mini` trả nhãn `bi_lua`, độ chắc 0.99, các cụm căn cứ chép từ lời khách, và code chọn làn `DUNG`.
+
+![Ảnh log: lời gọi OpenAI thật ở bước phân loại](prototype/anh-ai-log.png)
 
 ### 5.2 Hai ảnh có đánh số
 

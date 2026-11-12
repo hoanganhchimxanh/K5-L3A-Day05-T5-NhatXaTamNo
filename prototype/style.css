@@ -110,3 +110,4 @@ select,input[type=text],input[type=password]{width:100%;font:inherit;font-size:1
 .n::before{content:"#"}
 body.hide-n .n{display:none}
 .sec code{text-transform:none;letter-spacing:0}
+body.shot-ai .log{max-height:none}

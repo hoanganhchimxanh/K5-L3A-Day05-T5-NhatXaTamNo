@@ -1,7 +1,9 @@
 # Prototype T5 · Chat với ví — nhóm NhatXaTamNo
 
 ## Cách chạy
-- Mở `index.html` bằng trình duyệt. Không cần server, không cần đăng nhập.
+- **Có AI thật (OpenAI):** đặt `OPENAI_API_KEY` trong biến môi trường hoặc file `.env` ở thư mục gốc repo (file này đã `.gitignore`), chạy `python3 prototype/server.py`, mở http://127.0.0.1:8000. Trang tự chọn "AI thật · OpenAI". Đổi model bằng biến `OPENAI_MODEL` (mặc định `gpt-5.4-mini`). Chỉ cần Python 3, không cài thêm gì.
+- **Không có key:** mở thẳng `index.html` bằng trình duyệt; dùng luật từ khoá (mock).
+- `index.html#shot-ai` (qua server) mở ca K1 với ô log mở rộng, đúng như ảnh `anh-ai-log.png`.
 - `index.html#shot-k1` và `index.html#shot-k2` mở đúng trạng thái của hai ảnh `anh-k1.png`, `anh-k2.png` (spec §5.2).
 
 ## Bố cục
@@ -16,6 +18,7 @@
 
 ## Bộ phân loại
 - **Luật từ khoá (mặc định):** mock, không phải AI. Log ghi rõ "mock, KHÔNG phải AI".
+- **AI thật · OpenAI** (`gpt-5.4-mini`, mặc định khi chạy qua `server.py`): key ở server, trình duyệt không thấy. Gửi kèm các tin trước trong cùng cuộc chat để AI hiểu ngữ cảnh.
 - **AI thật · Claude** (`claude-opus-5-5`) hoặc **AI thật · Gemini:** dán API key lúc chạy. Key chỉ nằm trong bộ nhớ trang, không lưu, không có trong repo. Log hiện request (không kèm key), phản hồi thô và độ trễ. Gọi lỗi → tự về luật từ khoá và log ghi rõ.
 - Chỉ gõ dữ liệu dựng: tin nhắn được gửi tới nhà cung cấp AI.
 
