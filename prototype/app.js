@@ -135,6 +135,14 @@ function reset(preset) {
 
 // ---------- Tiện ích DOM ----------
 const $ = s => document.querySelector(s);
+// Đọc số tiền khách tự kể: "10k", "12tr", "1,5 triệu", "2.350.000", "1000000đ"
+function parseAmount(text) {
+  const t = norm(text);
+  const u = t.match(/(\d+(?:[.,]\d+)?)\s*(k|nghìn|ngàn|tr|triệu|củ)(?![a-zà-ỹ])/);
+  if (u) return Math.round(parseFloat(u[1].replace(',', '.')) * (/^(k|nghìn|ngàn)$/.test(u[2]) ? 1e3 : 1e6));
+  const p = t.match(/(\d{1,3}(?:\.\d{3})+|\d{4,})/);
+  return p ? parseInt(p[1].replace(/\./g, ''), 10) : null;
+}
 const fmt = n => n.toLocaleString('vi-VN').replace(/,/g, '.') + 'đ';
 const amt = () => (S.amount ? fmt(S.amount) : 'đang chờ');
 const N = d => `<span class="n">${'①②③④⑤⑥⑦'.indexOf(d) + 1}</span>`; // nhãn ①–⑦ trong spec §5 hiện thành số 1–7
@@ -309,7 +317,11 @@ function openVerify() {
 function afterVerify(ok) {
   if (!ok) { sysMsg('Xác thực chưa thành công.'); aiMsg('<p>Xác thực chưa thành công. Bạn thử lại, hoặc gặp tư vấn viên nếu vẫn không được.</p>'); return; }
   S.verified = true; sysMsg('Xác thực: đúng chủ ví.');
-  const after = S.pinned ? 'held' : (S.preset ? PRESETS[S.preset].systemAfterVerify : 'held');
+  // Hệ thống kiểm tra của ví (mock): ca có sẵn dùng kết quả dựng; ca tự gõ thì giao dịch "bình thường" được cho đi,
+  // còn lại (gấp thật, hỏi ngưỡng...) vẫn giữ để đi qua tư vấn viên. Ca đã ghim ở làn DỪNG luôn giữ.
+  const after = S.pinned ? 'held'
+    : S.preset ? PRESETS[S.preset].systemAfterVerify
+    : (S.cls && S.cls.label === 'binh_thuong' ? 'released' : 'held');
   if (after === 'released') {
     S.tx = 'released'; renderTx();
     sysMsg('Hệ thống kiểm tra giao dịch của ví (không phải trợ lý AI) đã cho giao dịch đi tiếp.');
@@ -384,6 +396,7 @@ async function send(text) {
   text = text.trim(); if (!text) return;
   const shown = hasOtpCode(text) ? text.replace(/\d{6}/g, '••••••') : text; // che OTP trong chat
   S.text = shown; userMsg(shown);
+  if (!S.preset && !S.amount && !hasOtpCode(text)) S.amount = parseAmount(text);
   const engine = $('#engine').value; let cls;
   const history = S.history.slice(); S.history.push(shown);
   if (engine === 'rules') {

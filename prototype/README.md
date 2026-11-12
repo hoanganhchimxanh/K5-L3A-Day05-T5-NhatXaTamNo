@@ -23,7 +23,7 @@
 - Chỉ gõ dữ liệu dựng: tin nhắn được gửi tới nhà cung cấp AI.
 
 ## Phần mock
-Giao dịch, màn hình xác thực, hệ thống kiểm tra giao dịch của ví, hàng đợi và màn hình tư vấn viên, cuộc gọi tổng đài. Chưa dựng lời nhắc khi khách im lặng 60 giây / 2 phút.
+Giao dịch, màn hình xác thực, hệ thống kiểm tra giao dịch của ví, hàng đợi và màn hình tư vấn viên, cuộc gọi tổng đài. Hệ thống kiểm tra của ví (mock) sau khi khách xác thực: K1, K2 vẫn giữ, K9 cho đi; ca tự gõ thì giao dịch "bình thường" cho đi, "gấp thật" vẫn giữ để qua tư vấn viên, ca đã vào làn DỪNG luôn giữ. Số tiền trên thẻ lấy từ tin khách kể ("10k", "12tr", "2.350.000"). Chưa dựng lời nhắc khi khách im lặng 60 giây / 2 phút.
 
 ## Số chú thích (nhãn vàng #1–#7 = ①–⑦ trong spec §5.2)
 | Số | Chỗ | Ý |
