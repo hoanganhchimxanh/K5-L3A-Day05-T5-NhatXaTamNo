@@ -7,6 +7,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header class="topbar">
+  <div class="logo">T5</div>
+  <div><div class="t1">Trợ lý ví · giao dịch bị giữ</div><div class="t2">Prototype nhóm NhatXaTamNo · dữ liệu dựng, không đăng nhập, không backend</div></div>
+  <div class="legend"><span>Bảng điều khiển</span><span>Màn hình khách</span><span>Màn hình tư vấn viên</span></div>
+</header>
 <div class="app">
 
   <!-- CỘT TRÁI: bảng điều khiển cho người chấm -->
@@ -25,7 +30,7 @@
 
     <div class="sec">2 · Bối cảnh</div>
     <label class="row"><input type="checkbox" id="offHours"> Ngoài giờ trực (tư vấn viên chỉ trực 8h–20h)</label>
-    <label class="row"><input type="checkbox" id="showNums" checked> Hiện số chú thích 1–7 (= ①–⑦ trong spec §5)</label>
+    <label class="row"><input type="checkbox" id="showNums" checked> Hiện nhãn vàng #1–#7 (= ①–⑦ trong spec §5)</label>
 
     <div class="sec">3 · Bộ phân loại tin nhắn</div>
     <select id="engine">
@@ -53,7 +58,10 @@
 
   <!-- CỘT GIỮA: màn hình khách -->
   <main class="phone">
+   <div class="screen">
+    <div class="status"><span>9:41</span><span class="notch"></span><span>5G ▮▮▮</span></div>
     <header class="ph-head">
+      <div class="av">AI</div>
       <div>
         <div class="ph-title">Chat với ví</div>
         <div class="ph-sub">Trợ lý AI · tư vấn viên trực 8h–20h</div>
@@ -67,6 +75,7 @@
       <input id="msg" type="text" autocomplete="off" placeholder="Nhắn cho trợ lý...">
       <button class="btn pri" type="submit">Gửi</button>
     </form>
+   </div>
   </main>
 
   <!-- CỘT PHẢI: màn hình tư vấn viên -->

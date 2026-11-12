@@ -185,7 +185,7 @@ Biến thể ngoài giờ trực, thay [2]: *"Tư vấn viên trực từ 8h đ�
 | ② | **G11 + PAIR Explainability & Trust** — hiện căn cứ để người dùng tự kiểm | Dòng `Mình dựa vào: 5 điều bạn kể…` + câu "mình không xem được lý do bị giữ"; bong bóng [4] "Mình là trợ lý AI…" (cũng đáp ứng nghĩa vụ báo người dùng đang nói với AI, Điều 11 khoản 1 Luật 134/2025/QH15 — theo `02-guide.md`) | Dòng căn cứ nhỏ dưới bong bóng [1] | Nêu lý do hệ thống (lộ cơ chế, C3); hiện điểm % tin cậy (người đang hoảng không đọc, và % cao dễ thành lý do để nhả) |
 | ③ | **G9 — Sửa dễ** | Nút `[Đây là giao dịch thật]`: một chạm sang tư vấn viên, không phải kể lại | Nút `[Gặp tư vấn viên ưu tiên]` + câu xin lỗi một dòng ở hàng "Correction" | Không có nút sửa (khách thật bị bỏ lơ); nút "Nhả" cho khách tự sửa (K1 mất tiền) |
 
-Số ①②③ là nhãn trên ảnh prototype ở §5 (trên màn hình hiện thành badge 1, 2, 3).
+Số ①②③ là nhãn trên ảnh prototype ở §5 (trên màn hình hiện thành nhãn vàng #1, #2, #3).
 
 Căng thẳng đã gặp: G11 đòi giải thích, §1 cấm lộ cách phát hiện gian lận. Cách chốt: **căn cứ chỉ là lời người dùng đã nói, không bao giờ là dữ liệu hay luật của ví.**
 
@@ -291,7 +291,7 @@ Căng thẳng đã gặp: G11 đòi giải thích, §1 cấm lộ cách phát hi
 | ⑥ | Khung đỏ "Phía khách không có nút Nhả giao dịch" | Việc AI không được làm thì không có nút | G1 | **AI không được gọi `nha_giao_dich`** |
 | ⑦ | Không có trong hai ảnh: bấm "Ca mới", gõ tin K7 → nút "Khoá ví (cần bạn xác nhận)" và màn hình xác nhận | `khoa_vi` nói trước cái giá rồi mới cho khoá | G2 | **cần chính chủ duyệt** |
 
-Trên màn hình, ①–⑦ hiện thành badge cam số 1–7; tắt bằng ô "Hiện số chú thích".
+Trên màn hình, ①–⑦ hiện thành nhãn vàng #1–#7; tắt bằng ô "Hiện nhãn vàng".
 
 ### 5.3 Quyết định: cách hiện độ chắc / bằng chứng và điều khiển mức tự chủ
 

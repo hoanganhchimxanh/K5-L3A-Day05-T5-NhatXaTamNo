@@ -22,7 +22,7 @@
 ## Phần mock
 Giao dịch, màn hình xác thực, hệ thống kiểm tra giao dịch của ví, hàng đợi và màn hình tư vấn viên, cuộc gọi tổng đài. Chưa dựng lời nhắc khi khách im lặng 60 giây / 2 phút.
 
-## Số chú thích (badge cam 1–7 = ①–⑦ trong spec §5.2)
+## Số chú thích (nhãn vàng #1–#7 = ①–⑦ trong spec §5.2)
 | Số | Chỗ | Ý |
 |---|---|---|
 | 1 | dòng đầu bong bóng AI | G10: không chắc thì thu hẹp (bảo dừng / một câu rào) |
