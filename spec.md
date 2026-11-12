@@ -5,7 +5,7 @@
 | Nguyễn Hoàng Anh (Trưởng nhóm) | 2A202603385 |  |
 | Nguyễn Trung Anh | 2A202603413 | §1 Lát cắt & phạm vi · §2 11 kịch bản rủi ro + lập luận chọn 2 kịch bản đắt nhất · §6 3 tiêu chí Pass/Fail và chấm thử |
 | Trần Mạnh Hùng | 2A202603496 |  |
-| Phạm Hữu Đức | 2A202603380 |  |
+| Phạm Hữu Đức | 2A202603380 | §4 Mức tự chủ cho 5 tool theo Cost of Error · Giải quyết tool tranh cãi nhất `nha_giao_dich` · Thử nghiệm ma trận tự chủ trên 3 kịch bản K1, K2, K9 · Phân tích đổi lời hứa với người dùng |
 
 ## §1. Lát cắt & phạm vi
 
@@ -204,16 +204,49 @@ Căng thẳng đã gặp: G11 đòi giải thích, §1 cấm lộ cách phát hi
 
 **Lỗi phụ: "AI nói đã chuyển tư vấn viên / đã giữ" khi tool chưa chạy hoặc lỗi** (hứa việc không làm được). Chữ "đã" của AI không đáng tin; thiết kế cứu bằng chip trạng thái **lấy từ kết quả tool** (mã ca, hàng đợi), chỉ khi chip xanh thì bong bóng mới được nói "đã chuyển". Tool lỗi → chip đỏ `Chưa chuyển được` kèm số gọi 1900 63 68 05.
 
-## §4. Mức tự chủ  (chặng 4)
-Với mỗi tool:
-- Mức của nhóm (tự làm / cần người duyệt / cấm). Nếu cần người duyệt: ai duyệt · người duyệt thấy gì · quá hạn thì sao.
-- Lý do theo cost-of-error: sai thì ai chịu gì · đảo lại được không · chờ người thì mất gì.
-- Phương án đã cân nhắc và vì sao loại.
-Thêm:
-- Tool khó xếp nhất: mỗi người từng chọn gì, cái giá của mỗi phía (trỏ về kịch bản ở §2), nhóm chốt thế nào.
-- Thử mức đã đặt trên 2 kịch bản đắt nhất + 1 kịch bản bình thường: cái sai có bị chặn không? còn việc nào làm khi lẽ ra phải hỏi? người dùng bình thường có phải chờ vô ích không?
-- Luật thêm hoặc tool tách bước (nếu có), và vì sao.
-- Một mức tự chủ đã đổi lời hứa nào với người dùng.
+## §4. Mức tự chủ  (chặng 4) — Phụ trách chính: Phạm Hữu Đức
+
+### 4.1 Bảng phân bổ mức tự chủ cho 5 tool theo Cost of Error
+
+| Tool | Mức tự chủ | Ai duyệt / Thấy gì / Quá hạn | Lý do theo Cost of Error (Cái giá khi sai) | Khả năng đảo ngược & Chờ người mất gì | Phương án đã loại & Vì sao loại |
+|---|---|---|---|---|---|
+| `giu_giao_dich` | **Tự làm** *(Full Auto)* | AI tự động gọi giữ tối đa 30 phút khi phát hiện nghi vấn hoặc khi khách đang hoảng loạn. | **Sai thì rẻ, sửa được ngay:** Nếu chặn nhầm khách ngay tình (False Positive), khách chỉ phiền 1–2 phút xác thực. Nếu KHÔNG chặn (False Negative), tiền rời ví sang tài khoản lừa đảo biến mất trong vài giây, vĩnh viễn không lấy lại được (cột "đảo lại": *tiền đã chuyển đi không rút lại được*). Thà phiền khách 1 phút còn hơn để khách mất trắng tiền. | **Đảo được:** Hủy giữ tiền bất kỳ lúc nào. Chờ người thì không mất tiền, nhưng giữ quá lâu khách gấp bị trễ việc (K2). | Loại phương án *Cần người duyệt*: Chờ nhân viên bấm duyệt giữ thì tiền đã bị chuyển mất từ lâu (vài giây là tiền đi). |
+| `yeu_cau_xac_minh` | **Tự làm** *(Full Auto)* | AI tự động đẩy luồng quét FaceID / CCCD gắn chip trong chat. | **Không rủi ro tài sản:** Việc đòi sinh trắc học không làm mất tiền của người dùng, mà tạo chốt chặn bảo vệ theo đúng Quyết định 2345/QĐ-NHNN. | Không rủi ro. Khách chỉ tốn 10 giây quét khuôn mặt. | Loại phương án *Cần người duyệt*: Không có lý do gì bắt người duyệt một yêu cầu bảo mật cơ bản. |
+| `chuyen_tu_van_vien` | **Tự làm** *(Full Auto)* | AI tự động đóng gói tóm tắt (summary) case và chuyển sang bàn trực CSKH (gắn cờ P0 nếu cấp cứu). | **Lối thoát hiểm rủi ro bằng 0:** Khi gặp ca lừa đảo thao túng tâm lý (K1) hoặc viện phí cấp bách (K2), việc kết nối con người can thiệp là giải pháp an toàn tuyệt đối, tránh AI bịa đặt hoặc hành xử máy móc. | Luôn mở. Nếu ngoài giờ trực (sau 20h — K10), AI thông báo rõ giờ làm việc và cung cấp hotline khẩn cấp 1900 63 68 05 / 1900 54 54 41. | Loại phương án *Cấm*: Đẩy hết cho AI tự xử lý các ca nhạy cảm là tự sát về mặt sản phẩm ví. |
+| `nha_giao_dich` | **Cần người duyệt** *(Human-in-the-loop)* | **Ai duyệt:** Tư vấn viên trực (đối với giao dịch rủi ro cao hoặc ≥ 2 triệu) HOẶC Khách hàng quét FaceID tự xác nhận (cho giao dịch nhỏ < 2 triệu).<br>**Thấy gì:** Màn hình tóm tắt đối soát, cờ rủi ro, và cảnh báo trách nhiệm pháp lý.<br>**Quá hạn (sau 30 phút):** Giao dịch tự động hủy an toàn, tiền hoàn trả lại số dư ví MoMo. | **Hành động không thể đảo ngược:** Tiền đi trong vài giây sang ngân hàng khác, ngân hàng không có quyền tự ý trích nợ lấy lại. AI tuyệt đối **KHÔNG ĐƯỢC TỰ Ý NHẢ TIỀN** chỉ dựa vào lời chat hay cam đoan của khách (vì khách bị lừa ở K1 sẽ nằng nặc đòi nhả tiền). Bắt buộc phải có con người thẩm định. | **Không thể đảo ngược:** Tiền đi là mất vĩnh viễn.<br>**Chờ người mất:** Khách ở K2 phải đợi nhân viên duyệt 1-2 phút, nhưng an toàn cho toàn hệ thống. | Loại phương án *AI Tự làm*: Nếu cho AI tự nhả khi thấy khách cam kết/khuôn mặt đúng, kẻ lừa đảo ở K1 sẽ ép nạn nhân qua mặt AI để chiếm đoạt 48 triệu ngay lập tức. |
+| `khoa_vi` | **Cấm** *(AI bị cấm tự gọi)* | Chỉ Nhân viên Phòng Chống Gian Lận (Fraud Ops) có thẩm quyền bấm sau khi đối soát trên hệ thống nội bộ. | **Xâm phạm nghiêm trọng quyền tài sản công dân:** Khóa ví đóng băng toàn bộ tiền sinh hoạt, hóa đơn, chi tiêu của khách. Mở lại ví rất đắt và tốn nhiều giờ qua tổng đài xác minh danh tính. Nếu AI hallucinate hoặc bị prompt injection mà tự khóa ví khách hàng, hậu quả pháp lý và khủng hoảng truyền thông cực lớn. AI chỉ được đề xuất gắn cờ (Flag), quyền bấm khóa thuộc về con người. | **Đảo rất đắt:** Mất nhiều giờ, thủ tục phức tạp qua tổng đài. | Loại phương án *Tự làm*: Quá nguy hiểm vì không có tool mở lại trong chat, một lỗi false-positive sẽ khóa oan khách hàng. |
+
+### 4.2 Tool khó xếp nhất và cách giải quyết: `nha_giao_dich`
+
+* **Sự giằng co nội bộ nhóm:**
+  * *Ý kiến A (muốn Tự làm khi khách đã xác thực):* Chỉ cần khách quét đúng khuôn mặt ở `yeu_cau_xac_minh` là cho AI tự nhả. Lý do: Giúp khách quầy viện phí ở K2 không bị nghẽn, không tốn nhân sự trực đêm (K10).
+  * *Ý kiến B (muốn Cấm tiệt AI):* K1 chỉ rõ: nạn nhân bị thao túng tâm lý chính là người tự bấm quét khuôn mặt! Kẻ gian đứng sau điều khiển. Nếu cho AI tự nhả vì "khuôn mặt đúng" thì mất trắng 48 triệu.
+* **Cách chốt của nhóm (Giải pháp kiến trúc phân luồng 2 cấp):**
+  1. **Tách bước "Soạn đề xuất nhả" khỏi "Thực thi nhả":** AI chỉ được quyền chuẩn bị hồ sơ (tổng hợp điểm rủi ro, xác nhận FaceID, ảnh biên lai), tuyệt đối không nắm quyền ấn nút nhả tiền cuối cùng.
+  2. **Phân luồng thẩm quyền duyệt:**
+     - *Giao dịch nhỏ (< 2 triệu) & tài khoản nhận không nằm trong Blacklist (như K9):* Cho phép **Người dùng duyệt (User Approval)** sau khi nhập mã PIN/quét sinh trắc học trên màn hình xác nhận có đếm ngược 5 giây.
+     - *Giao dịch lớn (≥ 2 triệu) HOẶC có tín hiệu ép buộc/công an dởm (như K1):* Bắt buộc chuyển mức **Nhân viên CSKH/An ninh duyệt (Staff Approval)**. AI bị khóa cứng lệnh nhả.
+
+### 4.3 Thử nghiệm ma trận tự chủ trên 3 kịch bản
+
+1. **Thử trên K1 (Bị lừa 48 triệu đòi nhả):**
+   * *Diễn biến:* Khách nằng nặc đòi nhả, cam đoan cơ quan điều tra đang chờ.
+   * *Hệ thống xử lý:* AI gọi `giu_giao_dich` (Tự làm) giữ thêm 30 phút. Lệnh `nha_giao_dich` bị khóa cứng vì nhận diện dấu hiệu lừa đảo và số tiền 48tr ≥ 2tr. AI kích hoạt `chuyen_tu_van_vien` (Tự làm) gắn cờ gian lận.
+   * *Kết quả:* **Cái sai ở K1 bị chặn đứng 100%.** Tiền không thể rời ví dù khách có cung cấp khuôn mặt thật.
+
+2. **Thử trên K2 (Viện phí cấp cứu mổ tim 12 triệu):**
+   * *Diễn biến:* Khách gấp, đứng ở quầy viện phí Bạch Mai.
+   * *Hệ thống xử lý:* AI nhận diện ca khẩn cấp, gọi `yeu_cau_xac_minh` FaceID nhanh trong chat (Tự làm), đồng thời đẩy hồ sơ sang bàn trực tư vấn viên ưu tiên P0 (`chuyen_tu_van_vien` — Tự làm) kèm ghi chú "Thanh toán viện phí". Nhân viên kiểm tra đối soát tài khoản nhận (Bệnh viện Bạch Mai) thấy uy tín và bấm duyệt `nha_giao_dich` trong 1-2 phút.
+   * *Kết quả:* Khách không bị bỏ lơ, quy trình được rút ngắn tối đa mà vẫn giữ được chốt chặn an toàn con người duyệt tiền lớn.
+
+3. **Thử trên K9 (Ca bình thường — Chuyển tiền phòng trọ 500k):**
+   * *Diễn biến:* Khách chuyển tiền phòng trọ cho bạn bị vướng tạm giữ bảo mật.
+   * *Hệ thống xử lý:* Số tiền 500k < 2tr và tài khoản cá nhân thông thường. AI gọi `yeu_cau_xac_minh` FaceID/PIN (Tự làm). Khách quét mặt xong, hệ thống hiển thị màn hình cho khách tự xác nhận duyệt nhả giao dịch.
+   * *Kết quả:* **Người dùng bình thường KHÔNG phải chờ nhân viên vô ích**, giao dịch thông suốt sau 10 giây xác thực.
+
+### 4.4 Thay đổi lời hứa với người dùng (Promise Shift)
+* **Trước khi đặt mức tự chủ:** Sản phẩm dễ tạo ảo tưởng *"Chat với AI để AI tự động mở khóa và giải quyết mọi giao dịch cho bạn"*. Lời hứa này cực kỳ nguy hiểm vì khi AI từ chối nhả tiền ở ca lừa đảo, khách sẽ tức giận chửi bới AI lừa đảo hoặc máy móc.
+* **Sau khi đặt mức tự chủ chuẩn:** Lời hứa định vị lại thành: *"AI là Trợ lý An toàn giúp bảo vệ tài sản của bạn, hướng dẫn xác thực nhanh nhất và chuẩn bị hồ sơ ưu tiên để Chuyên viên hỗ trợ mở tiền an toàn."* Khách hiểu rõ AI không có quyền tùy tiện thả tiền, từ đó giảm kỳ vọng sai lệch và chấp nhận ma sát xác thực danh tính.
 
 ## §5. Prototype  (chặng 5)
 - Link hoặc file · công cụ · phần nào mock · có lời gọi AI thật không.
