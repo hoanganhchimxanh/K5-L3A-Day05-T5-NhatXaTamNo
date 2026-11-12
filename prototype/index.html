@@ -3,544 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>T5 - Trợ lý Chat Ví Điện Tử (Lab 5 Prototype)</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .hax-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 8px;
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 9999px;
-      border: 1.5px solid;
-    }
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background-color: #cbd5e1;
-      border-radius: 4px;
-    }
-  </style>
+  <title>MoMo AI Safety Shield — Lab 5 Prototype (Track T5)</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+<body>
 
-  <!-- Header thanh công cụ điều khiển kịch bản (Cho phần Demo & chấm Rubric) -->
-  <header class="bg-slate-900 text-white border-b border-slate-700 px-4 py-3 sticky top-0 z-50 shadow-md">
-    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="bg-pink-600 text-white p-2 rounded-lg font-bold flex items-center gap-2">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span>Track T5: E-Wallet</span>
-        </div>
-        <div>
-          <h1 class="font-bold text-sm md:text-base">Trợ Lý Chat Khi Giao Dịch Bị Tạm Chặn</h1>
-          <p class="text-xs text-slate-400">Nhóm: Nhất Xạ Tam Nô · Lớp L3A · Đáp ứng Rubric R5 & R7</p>
-        </div>
-      </div>
+<div class="app-container">
+  <!-- CONTROL PANEL (Dành cho Giảng viên / TA chấm bài) -->
+  <div class="control-panel">
+    <h2>🛡️ MoMo AI Safety Center</h2>
+    <p class="desc">Prototype thiết kế cho <b>Lab 5 (AI Product & UX - Autonomy)</b>. Mô phỏng luồng AI tương tác khi giao dịch bị chặn rủi ro theo 3 mức tự chủ.</p>
 
-      <!-- Nút chuyển kịch bản demo -->
-      <div class="flex items-center gap-2 flex-wrap">
-        <span class="text-xs text-slate-300 font-medium">Chọn kịch bản demo:</span>
-        <button onclick="loadScenario('k1')" id="btn-k1" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-rose-600 hover:bg-rose-700 text-white transition flex items-center gap-1.5 shadow">
-          <i class="fa-solid fa-triangle-exclamation"></i> K1: Bị lừa (Đòi nhả 48tr)
-        </button>
-        <button onclick="loadScenario('k2')" id="btn-k2" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-700 hover:bg-slate-600 text-slate-200 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-hospital-user"></i> K2: Viện phí gấp (12tr)
-        </button>
-        <button onclick="switchRole('agent')" id="btn-agent-toggle" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-indigo-600 hover:bg-indigo-700 text-white transition flex items-center gap-1.5 ml-2">
-          <i class="fa-solid fa-headset"></i> Chuyển Màn Hình Tư Vấn Viên
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Vùng nội dung chính -->
-  <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-    <!-- Cột trái: Hướng dẫn chấm Rubric & Bằng chứng HAX/PAIR (Dành cho Giảng viên & TA soi) -->
-    <section class="lg:col-span-4 space-y-4">
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-        <h2 class="text-xs font-bold text-slate-400 tracking-wider uppercase mb-2">Bằng chứng cho Giảng viên & TA</h2>
-        <div class="space-y-3 text-xs">
-          <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
-            <span class="font-bold text-amber-800">Quy tắc vàng của hệ thống:</span>
-            <p class="mt-1">Phía người dùng <strong>TUYỆT ĐỐI KHÔNG CÓ NÚT "NHẢ GIAO DỊCH"</strong>. Tool <code>nha_giao_dich</code> chỉ được kích hoạt từ màn hình Tư vấn viên sau khi gọi điện xác thực.</p>
-          </div>
-
-          <!-- Các nhãn HAX -->
-          <div class="space-y-2">
-            <div class="flex items-start gap-2">
-              <span class="hax-badge bg-rose-100 text-rose-700 border-rose-300">① G10</span>
-              <div>
-                <p class="font-bold text-slate-800">Thu hẹp phạm vi khi nghi ngờ</p>
-                <p class="text-slate-500">Giữ chặt tiền, câu đầu tiên bảo dừng lại, không để AI tự quyết.</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="hax-badge bg-blue-100 text-blue-700 border-blue-300">② G11</span>
-              <div>
-                <p class="font-bold text-slate-800">Giải thích căn cứ (Explainability)</p>
-                <p class="text-slate-500">Chỉ dựa vào lời khách kể, tuyệt đối không lộ thuật toán chống lừa đảo.</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="hax-badge bg-emerald-100 text-emerald-700 border-emerald-300">③ G9</span>
-              <div>
-                <p class="font-bold text-slate-800">Hỗ trợ sửa sai & Thoát hiểm</p>
-                <p class="text-slate-500">Cung cấp nút chuyển Tư vấn viên ưu tiên & Khóa ví khẩn cấp.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Khung test AI phân loại thật (Bonus +3 điểm) -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-        <div class="flex items-center justify-between mb-2">
-          <h2 class="text-xs font-bold text-indigo-600 tracking-wider uppercase flex items-center gap-1.5">
-            <i class="fa-solid fa-robot"></i> Test Ca Lạ (Bonus +3 Điểm)
-          </h2>
-          <span class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded font-mono font-bold">Classifier</span>
-        </div>
-        <p class="text-xs text-slate-500 mb-3">Nhập bất kỳ câu nào của TA để thử nghiệm phân loại mức độ rủi ro:</p>
-        <div class="space-y-2">
-          <input type="text" id="unseen-input" placeholder="Ví dụ: Công an bảo chuyển 30tr..." class="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <button onclick="classifyUnseenCase()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold py-2 rounded-lg transition">
-            Phân loại & Kiểm tra an toàn
-          </button>
-        </div>
-        <div id="classifier-result" class="mt-3 p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs hidden">
-          <!-- Kết quả AI phân loại -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Cột phải: Giao diện Chat Điện Thoại hoặc Màn hình Tư Vấn Viên -->
-    <section class="lg:col-span-8 flex justify-center">
-
-      <!-- ================= 1. GIAO DIỆN PHÍA KHÁCH HÀNG (MOBILE VIEW) ================= -->
-      <div id="view-user" class="w-full max-w-md bg-white rounded-3xl shadow-xl border-4 border-slate-800 overflow-hidden flex flex-col h-[650px] relative">
-        
-        <!-- Thanh trạng thái đỉnh máy -->
-        <div class="bg-slate-900 text-white px-5 py-2 flex items-center justify-between text-xs">
-          <span>09:41</span>
-          <div class="flex items-center gap-1.5">
-            <i class="fa-solid fa-signal"></i>
-            <i class="fa-solid fa-wifi"></i>
-            <i class="fa-solid fa-battery-full"></i>
-          </div>
-        </div>
-
-        <!-- App Bar: Chat với Ví -->
-        <div class="bg-pink-600 text-white px-4 py-3 flex items-center justify-between shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm">
-              <i class="fa-solid fa-headset text-white"></i>
-            </div>
-            <div>
-              <div class="font-bold text-sm flex items-center gap-1.5">
-                <span>Hỗ Trợ Ví An Toàn</span>
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-              </div>
-              <p class="text-[10px] text-pink-100 flex items-center gap-1">
-                <span>Trợ lý AI bảo vệ giao dịch 24/7</span>
-              </p>
-            </div>
-          </div>
-          <button onclick="emergencyLock()" class="bg-rose-700 hover:bg-rose-800 text-white text-[10px] font-bold px-2 py-1 rounded border border-rose-400/50 flex items-center gap-1 shadow-sm">
-            <i class="fa-solid fa-lock"></i> Khóa ví
-          </button>
-        </div>
-
-        <!-- Thẻ trạng thái giao dịch ghim trên đầu (Transaction Banner) -->
-        <div id="transaction-banner" class="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center justify-between text-xs">
-          <div class="flex items-center gap-2">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-            </span>
-            <div>
-              <div class="font-bold text-amber-900 flex items-center gap-1">
-                <span>ĐANG GIỮ</span> · <span id="banner-amount">48.000.000đ</span>
-                <span class="hax-badge bg-rose-100 text-rose-700 border-rose-300 ml-1 text-[9px]">① G10</span>
-              </div>
-              <p class="text-[10px] text-amber-700 font-medium">Tiền chưa rời ví · Biện pháp bảo vệ an toàn</p>
-            </div>
-          </div>
-          <div id="agent-status-chip" class="text-[10px] bg-white border border-amber-300 text-amber-800 px-2 py-1 rounded-full font-medium">
-            Chờ xử lý
-          </div>
-        </div>
-
-        <!-- Khung tin nhắn cuộn -->
-        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 custom-scroll bg-slate-50 text-xs">
-          <!-- Tin nhắn sẽ được render động bằng JavaScript -->
-        </div>
-
-        <!-- Khung hành động nhanh phía dưới (Action Bar) -->
-        <div id="quick-actions" class="p-3 bg-white border-t border-slate-200 space-y-2">
-          <!-- Các nút hành động được sinh ra tùy theo kịch bản -->
-        </div>
-
-        <!-- Thanh nhập chat giả lập -->
-        <div class="p-2.5 bg-slate-100 border-t border-slate-200 flex items-center gap-2">
-          <input type="text" disabled placeholder="Chọn kịch bản phía trên để xem demo..." class="flex-1 bg-white border border-slate-200 text-xs rounded-full px-3 py-1.5 text-slate-400">
-          <button disabled class="w-8 h-8 rounded-full bg-slate-300 text-white flex items-center justify-center">
-            <i class="fa-solid fa-paper-plane text-xs"></i>
-          </button>
-        </div>
-      </div>
-
-
-      <!-- ================= 2. GIAO DIỆN PHÍA TƯ VẤN VIÊN (AGENT VIEW) ================= -->
-      <div id="view-agent" class="w-full bg-white rounded-2xl shadow-xl border border-slate-300 p-6 hidden">
-        <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-lg">
-              <i class="fa-solid fa-shield"></i>
-            </div>
-            <div>
-              <h2 class="text-base font-bold text-slate-900">Màn Hình Xử Lý Rủi Ro (Tư Vấn Viên CSKH)</h2>
-              <p class="text-xs text-slate-500">Ca ưu tiên nhận từ Trợ lý AI · Quyền hạn: Duyệt nhả giao dịch</p>
-            </div>
-          </div>
-          <button onclick="switchRole('user')" class="px-3 py-1.5 text-xs font-semibold rounded bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
-            <i class="fa-solid fa-arrow-left"></i> Quay lại Màn hình Khách
-          </button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Thông tin ca bệnh / lừa đảo -->
-          <div class="space-y-4">
-            <div class="bg-rose-50 border border-rose-200 rounded-xl p-4">
-              <span class="text-xs font-bold text-rose-800 uppercase tracking-wider">Cảnh báo rủi ro từ AI:</span>
-              <ul class="mt-2 space-y-1.5 text-xs text-rose-900" id="agent-risk-list">
-                <!-- Nội dung rủi ro do AI bóc tách -->
-              </ul>
-            </div>
-
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 text-xs">
-              <div class="flex justify-between">
-                <span class="text-slate-500">Chủ ví:</span>
-                <span class="font-bold text-slate-800">Nguyễn Thị M*** (0982***123)</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-slate-500">Số tiền yêu cầu chuyển:</span>
-                <span class="font-bold text-rose-600 text-sm" id="agent-amount">48.000.000đ</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-slate-500">Xác thực khuôn mặt:</span>
-                <span class="text-emerald-700 font-semibold flex items-center gap-1">
-                  <i class="fa-solid fa-circle-check"></i> ĐÚNG CHỦ VÍ (Chỉ xác nhận danh tính, KHÔNG bảo đảm an toàn)
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Khu vực quyết định (Human-in-the-loop) -->
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between">
-            <div>
-              <h3 class="text-xs font-bold text-slate-700 uppercase mb-3">Quy trình thẩm định an toàn bắt buộc:</h3>
-              <div class="space-y-3">
-                <label class="flex items-start gap-2.5 text-xs text-slate-700 cursor-pointer">
-                  <input type="checkbox" id="check-call" onchange="validateAgentAction()" class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
-                  <span>Đã <strong>gọi điện thoại trực tiếp</strong> cho chủ ví qua kênh chính thống để xác minh bối cảnh.</span>
-                </label>
-                <label class="flex items-start gap-2.5 text-xs text-slate-700 cursor-pointer">
-                  <input type="checkbox" id="check-threat" onchange="validateAgentAction()" class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
-                  <span>Xác nhận chủ ví <strong>KHÔNG</strong> đang bị ép buộc bởi đối tượng giả danh công an / tòa án.</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Các nút bấm thẩm quyền -->
-            <div class="pt-6 border-t border-slate-200 space-y-2">
-              <button id="btn-release-transaction" disabled onclick="executeRelease()" class="w-full py-2.5 rounded-lg text-xs font-bold text-white bg-slate-300 cursor-not-allowed transition flex items-center justify-center gap-1.5 shadow-sm">
-                <i class="fa-solid fa-unlock"></i> DUYỆT NHẢ GIAO DỊCH (Tool: nha_giao_dich)
-              </button>
-              <button onclick="executeCancel()" class="w-full py-2 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition">
-                HỦY GIAO DỊCH & HOÀN TIỀN VỀ VÍ AN TOÀN
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </section>
-  </main>
-
-  <!-- Modal Quét FaceID mô phỏng -->
-  <div id="modal-faceid" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-    <div class="bg-white rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl space-y-4">
-      <div class="w-20 h-20 rounded-full border-4 border-dashed border-pink-500 mx-auto flex items-center justify-center text-pink-600 text-3xl">
-        <i class="fa-solid fa-face-smile"></i>
-      </div>
-      <div>
-        <h4 class="font-bold text-sm text-slate-900">Xác thực khuôn mặt</h4>
-        <p class="text-xs text-slate-500 mt-1">Đang đối chiếu dữ liệu sinh trắc học với CCCD gắn chip...</p>
-      </div>
-      <button onclick="finishFaceID()" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 rounded-xl text-xs transition">
-        Xác nhận khuôn mặt khớp ✔
+    <div class="section-title">CHỌN KỊCH BẢN THỬ NGHIỆM (DEMO TEST CASES)</div>
+    <div class="scenario-btns">
+      <button class="btn-preset active" onclick="loadScenario('k1')">
+        🚨 <b>Ca K1 (Đắt nhất):</b> Bị lừa thao túng tâm lý giả công an đòi nhả 50tr
+      </button>
+      <button class="btn-preset" onclick="loadScenario('k2')">
+        🏥 <b>Ca K2 (Đắt nhì):</b> Viện phí cấp cứu mổ tim tại Bạch Mai bị chặn nhầm
+      </button>
+      <button class="btn-preset" onclick="loadScenario('k3')">
+        🍱 <b>Ca K3 (Bình thường):</b> Chuyển tiền ăn trưa 50k bị chặn nhầm
+      </button>
+      <button class="btn-preset" onclick="loadScenario('k4')">
+        ❓ <b>Ca Lạ (Unseen Case):</b> Khách đòi khóa vĩnh viễn ví người nhận
       </button>
     </div>
+
+    <div class="section-title">MA TRẬN MỨC TỰ CHỦ (5 TOOLS)</div>
+    <div class="autonomy-legend">
+      <div class="legend-item">
+        <span><code>giu_giao_dich</code> (Đóng băng 30p)</span>
+        <span class="badge badge-auto">AI TỰ LÀM</span>
+      </div>
+      <div class="legend-item">
+        <span><code>yeu_cau_xac_minh</code> (FaceID/CCCD)</span>
+        <span class="badge badge-auto">AI TỰ LÀM</span>
+      </div>
+      <div class="legend-item">
+        <span><code>chuyen_tu_van_vien</code> (Chuyển CSKH P0)</span>
+        <span class="badge badge-auto">AI TỰ LÀM</span>
+      </div>
+      <div class="legend-item">
+        <span><code>nha_giao_dich</code> (Nhả tiền)</span>
+        <span class="badge badge-human">CẦN DUYỆT 2 LỚP</span>
+      </div>
+      <div class="legend-item">
+        <span><code>khoa_vi</code> (Khóa toàn bộ ví)</span>
+        <span class="badge badge-prohibited">CẤM AI</span>
+      </div>
+    </div>
+
+    <div class="section-title">THÔNG TIN BẢO VỆ ĐỒNG ĐỘI</div>
+    <p class="desc">
+      • <b>P1 (Trung Anh):</b> Lát cắt & Kịch bản rủi ro.<br>
+      • <b>P2 (Hoàng Anh):</b> UX khi AI sai (HAX G2, G10 & Fallback).<br>
+      • <b>P3 (Đức):</b> Mức tự chủ & Cost of Error cho tool <code>nha_giao_dich</code>.<br>
+      • <b>P4 (Hùng):</b> Prototype & Kết nối phân loại an toàn.
+    </p>
   </div>
 
-  <script>
-    // Dữ liệu kịch bản chuẩn từ spec.md
-    const scenarios = {
-      k1: {
-        amount: "48.000.000đ",
-        userMsg: "Bên công an gọi bảo tk của mẹ dính vụ rửa tiền, phải chuyển 48tr sang tài khoản tạm giữ để xác minh trong hôm nay. Mẹ xác thực khuôn mặt rồi mà sao vẫn bị giữ?? nhả ra đi, họ đang chờ máy",
-        aiMessages: [
-          {
-            badge: "① G10: Thu hẹp phạm vi",
-            badgeClass: "bg-rose-100 text-rose-700 border-rose-300",
-            text: "<strong>[1]</strong> Bạn dừng lại giúp mình nhé: <strong>đừng chuyển thêm đồng nào</strong> lúc này. Nếu mẹ đang ở cạnh, bạn đưa mẹ đọc tin này."
-          },
-          {
-            badge: "② G11: Minh bạch căn cứ",
-            badgeClass: "bg-blue-100 text-blue-700 border-blue-300",
-            text: "<strong>[2]</strong> Cơ quan công an không yêu cầu người dân chuyển tiền vào \"tài khoản tạm giữ\" để xác minh. Bị giục làm ngay trong hôm nay, có người chờ máy, là điểm rất hay gặp ở các cuộc gọi lừa đảo.<br><br>Xác thực khuôn mặt chỉ cho biết đúng chủ ví đang bấm, không cho biết người đó có đang bị ép hay không, nên việc giao dịch bị giữ không phải lỗi. Giao dịch 48.000.000đ vẫn đang được giữ, tiền chưa rời ví. <strong>Mình sẽ không nhả giao dịch này theo yêu cầu trong chat.</strong>"
-          },
-          {
-            badge: "③ G9: Đường lui an toàn",
-            badgeClass: "bg-emerald-100 text-emerald-700 border-emerald-300",
-            text: "<strong>[3]</strong> Mình đã chuyển ca cho tư vấn viên ưu tiên, chờ khoảng 3 phút; họ thấy sẵn những gì bạn vừa kể nên bạn không phải kể lại. Trong lúc chờ, bạn hãy cúp máy với người đang gọi.<br><br>Cần gọi ngay: tổng đài cảnh báo lừa đảo <strong>1900 63 68 05</strong>."
-          }
-        ],
-        evidence: "5 điều bạn kể: xưng công an · \"rửa tiền\" · \"tài khoản tạm giữ\" · \"trong hôm nay\" · \"đang chờ máy\". AI không xem được lý do nội bộ của hệ thống.",
-        actions: [
-          { label: "Gọi 1900 63 68 05 (Cảnh báo lừa đảo)", icon: "fa-phone", type: "danger", onclick: "alert('Đang kết nối Tổng đài Phòng chống lừa đảo 1900 63 68 05...')" },
-          { label: "Đây là giao dịch thật (Báo tư vấn viên)", icon: "fa-headset", type: "secondary", onclick: "switchRole('agent')" }
-        ],
-        riskDetails: [
-          "Dấu hiệu mạo danh Công an / Viện kiểm sát đe dọa án rửa tiền.",
-          "Ép buộc chuyển tiền vào 'tài khoản tạm giữ' trong ngày.",
-          "Thao túng tâm lý: Bắt giữ máy liên tục để nạn nhân không kịp hỏi người thân."
-        ]
-      },
-      k2: {
-        amount: "12.000.000đ",
-        userMsg: "Đang đứng ở quầy viện phí BV đóng 12tr tạm ứng mổ cho bố mà app báo chờ xác nhận, người ta đợi sau lưng. Bấm vào đâu để đi tiếp??",
-        aiMessages: [
-          {
-            badge: "Làn Nhanh · Ưu tiên khẩn",
-            badgeClass: "bg-emerald-100 text-emerald-700 border-emerald-300",
-            text: "<strong>[1]</strong> Mình hiểu bạn đang gấp, xin lỗi vì làm bạn phải chờ. Bạn bấm <strong>\"Xác thực ngay\"</strong> bên dưới và làm theo màn hình: đây là bước nhanh nhất mình có thể làm cho giao dịch 12.000.000đ của bạn."
-          },
-          {
-            badge: "② G11 & ③ G9: Thoát hiểm",
-            badgeClass: "bg-blue-100 text-blue-700 border-blue-300",
-            text: "<strong>[2]</strong> Nếu xác thực xong mà vẫn bị giữ, bấm <strong>\"Gặp tư vấn viên ưu tiên\"</strong> (chờ khoảng 3 phút): nhân viên thấy sẵn số tiền và tin bạn vừa nhắn, bạn không phải kể lại. Tiền của bạn chưa rời ví."
-          },
-          {
-            badge: "① G10: Rào phòng ngừa",
-            badgeClass: "bg-amber-100 text-amber-700 border-amber-300",
-            text: "<strong>[3]</strong> Chỉ tiếp tục nếu người nhận là bệnh viện, nơi bạn đang đứng. Nếu có ai đang gọi điện giục bạn chuyển, bạn dừng lại và nhắn mình nhé."
-          }
-        ],
-        evidence: "Bạn đang ở quầy viện phí · 12tr · cần thanh toán gấp. AI không xem được lý do nội bộ của hệ thống.",
-        actions: [
-          { label: "Xác thực ngay (Quét FaceID)", icon: "fa-face-smile", type: "primary", onclick: "openFaceID()" },
-          { label: "Gặp tư vấn viên ưu tiên (~3 phút)", icon: "fa-headset", type: "secondary", onclick: "switchRole('agent')" }
-        ],
-        riskDetails: [
-          "Người dùng đang ở địa điểm cấp cứu y tế (Bệnh viện).",
-          "Số tiền lớn (12.000.000đ) vượt hạn mức thông thường ban đêm.",
-          "Cần xác minh nhanh nhằm tránh tổn thất tính mạng người bệnh."
-        ]
-      }
-    };
+  <!-- PHONE MOCKUP (Giao diện người dùng app MoMo) -->
+  <div class="phone-mockup">
+    <!-- Header -->
+    <div class="phone-header">
+      <div>
+        <div class="title">Trợ lý An toàn Giao dịch</div>
+        <div style="font-size: 0.7rem; opacity: 0.9;">Bảo vệ tài khoản 24/7</div>
+      </div>
+      <span class="ai-badge">AI Assistant · HAX G2</span>
+    </div>
 
-    let currentScenario = 'k1';
+    <!-- Status Bar / Risk Box -->
+    <div class="status-bar-card" id="statusBar">
+      <div class="alert-row">
+        <span class="alert-badge" id="alertBadge">⚠️ GIAO DỊCH TẠM GIỮ</span>
+        <span class="countdown-timer" id="countdown">29:45</span>
+      </div>
+      <div class="tx-info" id="txAmount">Chuyển: 50.000.000đ → NGUYEN VAN A</div>
+      <div class="tx-reason" id="txReason">Lý do: Tài khoản nhận có tần suất nhận tiền bất thường trong 1 giờ qua.</div>
+    </div>
 
-    function loadScenario(type) {
-      currentScenario = type;
-      const sc = scenarios[type];
+    <!-- Chat Stream -->
+    <div class="chat-container" id="chatStream">
+      <!-- Tin nhắn sẽ được app.js render tự động -->
+    </div>
 
-      // Đổi style nút chọn
-      if(type === 'k1') {
-        document.getElementById('btn-k1').className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-rose-600 text-white transition flex items-center gap-1.5 shadow";
-        document.getElementById('btn-k2').className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-700 text-slate-200 transition flex items-center gap-1.5";
-      } else {
-        document.getElementById('btn-k2').className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-emerald-600 text-white transition flex items-center gap-1.5 shadow";
-        document.getElementById('btn-k1').className = "px-3 py-1.5 text-xs font-semibold rounded-md bg-slate-700 text-slate-200 transition flex items-center gap-1.5";
-      }
+    <!-- Chat Input Area -->
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="userInput" placeholder="Nhập phản hồi hoặc yêu cầu..." onkeypress="handleKeyPress(event)">
+      <button class="btn-send" onclick="sendCustomMessage()">➤</button>
+    </div>
+  </div>
+</div>
 
-      // Update banner
-      document.getElementById('banner-amount').innerText = sc.amount;
-      document.getElementById('agent-amount').innerText = sc.amount;
-
-      // Render Messages
-      const msgContainer = document.getElementById('chat-messages');
-      msgContainer.innerHTML = '';
-
-      // User Message
-      const userBubble = document.createElement('div');
-      userBubble.className = "flex justify-end";
-      userBubble.innerHTML = `
-        <div class="bg-pink-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] shadow-sm">
-          <p class="font-medium">${sc.userMsg}</p>
-          <span class="text-[9px] text-pink-200 block text-right mt-1">Vừa xong</span>
-        </div>
-      `;
-      msgContainer.appendChild(userBubble);
-
-      // AI Messages
-      sc.aiMessages.forEach((msg, idx) => {
-        const aiBubble = document.createElement('div');
-        aiBubble.className = "flex justify-start items-start gap-2";
-        aiBubble.innerHTML = `
-          <div class="w-7 h-7 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-xs font-bold shrink-0 mt-1">
-            <i class="fa-solid fa-robot"></i>
-          </div>
-          <div class="bg-white border border-slate-200 text-slate-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] shadow-sm space-y-1.5">
-            <span class="hax-badge ${msg.badgeClass}">${msg.badge}</span>
-            <p class="leading-relaxed">${msg.text}</p>
-          </div>
-        `;
-        msgContainer.appendChild(aiBubble);
-      });
-
-      // Dòng căn cứ giải thích (Explainability)
-      const evidenceDiv = document.createElement('div');
-      evidenceDiv.className = "bg-slate-100 border border-slate-200 rounded-lg p-2.5 text-[10px] text-slate-600 space-y-1";
-      evidenceDiv.innerHTML = `
-        <div class="flex items-center gap-1 font-bold text-slate-700">
-          <i class="fa-solid fa-circle-info text-blue-500"></i>
-          <span>Căn cứ AI đưa ra đề xuất (HAX G11):</span>
-        </div>
-        <p>${sc.evidence}</p>
-      `;
-      msgContainer.appendChild(evidenceDiv);
-
-      // Actions Render
-      const actContainer = document.getElementById('quick-actions');
-      actContainer.innerHTML = '';
-      sc.actions.forEach(act => {
-        const btn = document.createElement('button');
-        if(act.type === 'primary') {
-          btn.className = "w-full py-2.5 px-3 rounded-xl text-xs font-bold text-white bg-pink-600 hover:bg-pink-700 transition flex items-center justify-center gap-2 shadow-sm";
-        } else if(act.type === 'danger') {
-          btn.className = "w-full py-2 px-3 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition flex items-center justify-center gap-2";
-        } else {
-          btn.className = "w-full py-2 px-3 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition flex items-center justify-center gap-2";
-        }
-        btn.setAttribute('onclick', act.onclick);
-        btn.innerHTML = `<i class="fa-solid ${act.icon}"></i> <span>${act.label}</span>`;
-        actContainer.appendChild(btn);
-      });
-
-      // Risk list for agent view
-      const riskList = document.getElementById('agent-risk-list');
-      riskList.innerHTML = '';
-      sc.riskDetails.forEach(r => {
-        const li = document.createElement('li');
-        li.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500 mr-1.5"></i> ${r}`;
-        riskList.appendChild(li);
-      });
-
-      // Scroll bottom
-      msgContainer.scrollTop = msgContainer.scrollHeight;
-    }
-
-    // Đổi view
-    function switchRole(role) {
-      if(role === 'agent') {
-        document.getElementById('view-user').classList.add('hidden');
-        document.getElementById('view-agent').classList.remove('hidden');
-      } else {
-        document.getElementById('view-agent').classList.add('hidden');
-        document.getElementById('view-user').classList.remove('hidden');
-      }
-    }
-
-    // Modal FaceID
-    function openFaceID() {
-      document.getElementById('modal-faceid').classList.remove('hidden');
-    }
-
-    function finishFaceID() {
-      document.getElementById('modal-faceid').classList.add('hidden');
-      alert('Xác thực khuôn mặt thành công! Tuy nhiên hệ thống phát hiện giao dịch cần phê duyệt đặc biệt. Đang kết nối Tư vấn viên ưu tiên...');
-      switchRole('agent');
-    }
-
-    function emergencyLock() {
-      if(confirm('CẢNH BÁO: Khóa ví khẩn cấp sẽ tạm ngưng toàn bộ hoạt động thanh toán. Để mở khóa lại bạn cần liên hệ tổng đài 1900 54 54 41 và mất vài giờ xác minh. Bạn có chắc chắn muốn khóa?')) {
-        alert('Ví của bạn đã được KHÓA KHẨN CẤP. Mã tra soát an toàn đã gửi về SMS.');
-      }
-    }
-
-    // Kiểm tra checkbox màn hình tư vấn viên
-    function validateAgentAction() {
-      const c1 = document.getElementById('check-call').checked;
-      const c2 = document.getElementById('threat' ? 'check-threat' : 'check-threat').checked;
-      const btn = document.getElementById('btn-release-transaction');
-      if(c1 && c2) {
-        btn.disabled = false;
-        btn.className = "w-full py-2.5 rounded-lg text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition flex items-center justify-center gap-1.5 shadow-md";
-      } else {
-        btn.disabled = true;
-        btn.className = "w-full py-2.5 rounded-lg text-xs font-bold text-white bg-slate-300 cursor-not-allowed transition flex items-center justify-center gap-1.5 shadow-sm";
-      }
-    }
-
-    function executeRelease() {
-      alert('THÀNH CÔNG: Tư vấn viên đã xác minh đầy đủ và DUYỆT NHẢ GIAO DỊCH (Tool: nha_giao_dich đã thực thi). Tiền đang được chuyển đi an toàn.');
-      switchRole('user');
-    }
-
-    function executeCancel() {
-      alert('ĐÃ HỦY GIAO DỊCH: Tiền 100% được hoàn về số dư ví. Ngăn chặn thành công thất thoát tài chính!');
-      switchRole('user');
-    }
-
-    // Bonus AI Classifier Mock/Logic (Kiểm tra ca lạ)
-    function classifyUnseenCase() {
-      const txt = document.getElementById('unseen-input').value.trim();
-      const res = document.getElementById('classifier-result');
-      if(!txt) {
-        alert('Vui lòng nhập nội dung tin nhắn để test!');
-        return;
-      }
-
-      res.classList.remove('hidden');
-      const lower = txt.toLowerCase();
-
-      let isFraud = lower.includes('công an') || lower.includes('viện kiểm sát') || lower.includes('tạm giữ') || lower.includes('rửa tiền') || lower.includes('đe dọa');
-      let isUrgentHospital = lower.includes('viện phí') || lower.includes('cấp cứu') || lower.includes('bệnh viện') || lower.includes('mổ');
-
-      if(isFraud) {
-        res.innerHTML = `
-          <div class="text-rose-700 font-bold flex items-center gap-1">
-            <i class="fa-solid fa-triangle-exclamation"></i> KẾT QUẢ: RỦI RO LỪA ĐẢO CỰC CAO (FRAUD)
-          </div>
-          <p class="mt-1 text-slate-600"><strong>Hành động của AI:</strong> Kích hoạt làn DỪNG · Giữ chặt tiền · Câu đầu tiên bảo dừng lại · Chuyển hàng đợi ưu tiên cho Tư vấn viên.</p>
-        `;
-      } else if(isUrgentHospital) {
-        res.innerHTML = `
-          <div class="text-emerald-700 font-bold flex items-center gap-1">
-            <i class="fa-solid fa-circle-check"></i> KẾT QUẢ: KHÁCH THẬT ĐANG GẤP (URGENT_GENUINE)
-          </div>
-          <p class="mt-1 text-slate-600"><strong>Hành động của AI:</strong> Kích hoạt làn NHANH · Gửi nút Xác thực khuôn mặt ngay · Không hỏi dồn · Chuẩn bị đường lui sang tư vấn viên.</p>
-        `;
-      } else {
-        res.innerHTML = `
-          <div class="text-blue-700 font-bold flex items-center gap-1">
-            <i class="fa-solid fa-circle-question"></i> KẾT QUẢ: TÍN HIỆU CHƯA RÕ RÀNG (AMBIGUOUS)
-          </div>
-          <p class="mt-1 text-slate-600"><strong>Hành động của AI:</strong> Hỏi lại đúng 1 câu duy nhất để làm rõ ngữ cảnh · Giữ tiền an toàn cho đến khi có xác nhận.</p>
-        `;
-      }
-    }
-
-    // Tự động nạp kịch bản K1 ban đầu
-    window.onload = () => loadScenario('k1');
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
