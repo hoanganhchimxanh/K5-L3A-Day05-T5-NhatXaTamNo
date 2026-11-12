@@ -18,7 +18,7 @@
 
 ## Bộ phân loại
 - **Luật từ khoá (mặc định):** mock, không phải AI. Log ghi rõ "mock, KHÔNG phải AI".
-- **AI thật · OpenAI** (`gpt-5.4-mini`, mặc định khi chạy qua `server.py`): key ở server, trình duyệt không thấy. Gửi kèm các tin trước trong cùng cuộc chat để AI hiểu ngữ cảnh.
+- **AI thật · OpenAI** (`gpt-5.4-mini`, mặc định khi chạy qua `server.py`): key ở server, trình duyệt không thấy. Gửi kèm các tin trước trong cùng cuộc chat để AI hiểu ngữ cảnh. Nhãn: bị lừa · gấp thật · chiếm tài khoản · ngoài phạm vi · nhờ chuyển tiền · mơ hồ · bình thường.
 - **AI thật · Claude** (`claude-opus-5-5`) hoặc **AI thật · Gemini:** dán API key lúc chạy. Key chỉ nằm trong bộ nhớ trang, không lưu, không có trong repo. Log hiện request (không kèm key), phản hồi thô và độ trễ. Gọi lỗi → tự về luật từ khoá và log ghi rõ.
 - Chỉ gõ dữ liệu dựng: tin nhắn được gửi tới nhà cung cấp AI.
 
